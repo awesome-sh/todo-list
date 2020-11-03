@@ -11,123 +11,23 @@
         <div id="backBlur"></div>
 
         <div id="style-mode-toggle">
-            <div>Light</div>
+            <div class="mode-select">Light</div>
             <div>Dark</div>
         </div>
 
-        <div class="app-component">
+        <div id="app-component" class="app-component">
             <div class="app-top">
                 <div class="app-top-left">Sihus To-Do Application</div>
                 <div class="app-top-right">
                     <div id="addTodo">+ Add ToDo</div>
                 </div>
             </div>
-            <div class="app-middle">
-                <div class="todo-item">
-                    <div class="todo-item-date">2020년 11월 03일 17시59분33초</div>
-                    <div class="todo-item-title">First Item Test</div>
-                    <div class="todo-item-desc">
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                    </div>
-                    <div class="todo-item-btns">
-                        <button>삭제</button>
-                        <button>완료</button>
-                    </div>
-                </div>
-
-                <div class="todo-item">
-                    <div class="todo-item-date">2020년 11월 03일 17시59분33초</div>
-                    <div class="todo-item-title">First Item Test</div>
-                    <div class="todo-item-desc">
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                    </div>
-                    <div class="todo-item-btns">
-                        <button>삭제</button>
-                        <button>완료</button>
-                    </div>
-                </div>
-
-                <div class="todo-item">
-                    <div class="todo-item-date">2020년 11월 03일 17시59분33초</div>
-                    <div class="todo-item-title">First Item Test</div>
-                    <div class="todo-item-desc">
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                    </div>
-                    <div class="todo-item-btns">
-                        <button>삭제</button>
-                        <button>완료</button>
-                    </div>
-                </div>
-
-                <div class="todo-item">
-                    <div class="todo-item-date">2020년 11월 03일 17시59분33초</div>
-                    <div class="todo-item-title">First Item Test</div>
-                    <div class="todo-item-desc">
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                    </div>
-                    <div class="todo-item-btns">
-                        <button>삭제</button>
-                        <button>완료</button>
-                    </div>
-                </div>
-
-                <div class="todo-item">
-                    <div class="todo-item-date">2020년 11월 03일 17시59분33초</div>
-                    <div class="todo-item-title">First Item Test</div>
-                    <div class="todo-item-desc">
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                        First Item Content First Item Content 
-                    </div>
-                    <div class="todo-item-btns">
-                        <button>삭제</button>
-                        <button>완료</button>
-                    </div>
-                </div>
-                
+            <div class="app-cate">
+                <div> All</div>
+                <div> Incomplete</div>
+                <div> Complete</div>
+            </div>
+            <div id="app-middle" class="app-middle">
 
             </div>
             <div class="app-bottom">
@@ -136,9 +36,15 @@
         </div>
 
         <div id="add-todo-component">
-            <div class="todo-item-date">2020년 11월 03일 17시59분33초</div>
-            <div class="todo-item-title">First Item Test</div>
-            <div class="todo-item-desc">First Item Content</div>
+            <div class="add-todo-title">
+                할일을 추가해보세요
+            </div>
+            <form id="addTodoFrm">
+                <input type="date" name="date" id="form-date"/>
+                <input type="time" name="time" id="form-time"/>
+                <textarea name="todo" id="form-todo" placeholder="할일을 입력해주세요"/></textarea>
+                <button type="button" id="submitBtn">Add Todo</button>
+            </form>
         </div>
 
     </div>
