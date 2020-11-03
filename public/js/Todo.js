@@ -38,4 +38,17 @@ window.onload = () => {
             appContainer.classList.remove("AppContainer-dark-mode");
         }
     });
+
+    /**
+     * Add Todo
+     */
+    const addBtn = document.querySelector('#addTodo');
+    const backBlur = document.querySelector('#backBlur');
+    const addComponent = document.querySelector('#add-todo-component');
+
+    addBtn.addEventListener('click', () => {
+        backBlur.style.height = '100%';
+        addComponent.style.left = '50%';
+        addComponent.style.opacity = 1;
+    });
 }
