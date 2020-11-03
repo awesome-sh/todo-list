@@ -1,0 +1,26 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "To-Do Application by SungHwa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app.js localhost 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awesome-sh/todo-list.git"
+  },
+  "author": "SungHwa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awesome-sh/todo-list/issues"
+  },
+  "homepage": "https://github.com/awesome-sh/todo-list#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
