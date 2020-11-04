@@ -38,7 +38,7 @@ function refreshTodo() {
                     todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                     todoHTML +=         '</div>';
                     todoHTML +=         '<div class="todo-item-btns">';
-                    todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');">완료</button>';
+                    todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');"><i class="fas fa-check-circle"></i></button>';
                     todoHTML +=         '</div>';
                     todoHTML +=     '</div>';
                     todoHTML += '</div>';
@@ -65,7 +65,7 @@ function refreshTodo() {
                     todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                     todoHTML +=         '</div>';
                     todoHTML +=         '<div class="todo-item-btns">';
-                    todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');">삭제</button>';
+                    todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');"><i class="fas fa-trash-alt"></i></button>';
                     todoHTML +=         '</div>';
                     todoHTML +=     '</div>';
                     todoHTML += '</div>';
@@ -113,7 +113,7 @@ function fn_remove(todoIndex) {
     let message = '<i class="fas fa-exclamation"></i><br>';
     message += '해당 항목을 완전히 <b>삭제</b>하시겠습니까?<br>';
     message += '<button type="button" id="confirm-cancle" onclick="fn_confirm_cancle()";>취소</button>';
-    message += '<button type="button" id="confirm-delete" onclick="fn_confirm_ok()">삭제</button>';
+    message += '<button type="button" id="confirm-delete" onclick="fn_confirm_ok(' + todoIndex + ')"><i class="fas fa-trash-alt"></i></button>';
 
     fn_confirm(message);
 
@@ -180,11 +180,20 @@ function fn_confirm_cancle() {
  * Confirm Ok
  * @param {*} todoIndex 
  */
-function fn_confirm_ok() {
+function fn_confirm_ok(todoIndex) {
     const confirmPopup = document.getElementsByClassName('confirm');
     const backBlur = document.querySelector('#backBlur');
     document.body.removeChild(confirmPopup[0]);
     backBlur.style.height = '0';
+    
+    let nextTodoList = state.todo_list.filter((item) => {
+        if(item.index !== todoIndex) {
+            return item;
+        }
+    });
+
+    localStorage.setItem('todo_list', encodeURI(JSON.stringify(nextTodoList)));
+    refreshTodo();
 }
 
 
@@ -195,7 +204,7 @@ function fn_cate(type) {
     let todoHTML = "";
 
     switch(type) {
-        case '모두' :
+        case '모아보기' :
             if(state.todo_list.length > 0) {
                 // 미완료 목록 상단
                 for(let i = state.todo_list.length; i > 0; i-- ) {
@@ -213,7 +222,7 @@ function fn_cate(type) {
                         todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                         todoHTML +=         '</div>';
                         todoHTML +=         '<div class="todo-item-btns">';
-                        todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');">완료</button>';
+                        todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');"><i class="fas fa-check-circle"></i></button>';
                         todoHTML +=         '</div>';
                         todoHTML +=     '</div>';
                         todoHTML += '</div>';
@@ -221,7 +230,7 @@ function fn_cate(type) {
                 }
     
                 // 완료목록 분기
-                todoHTML += '<div class="complete-todo-line">Complete</div>';
+                todoHTML += '<div class="complete-todo-line">완료된 일</div>';
     
                 // 완료 목록 하단
                 for(let i = state.todo_list.length; i > 0; i-- ) {
@@ -240,7 +249,7 @@ function fn_cate(type) {
                         todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                         todoHTML +=         '</div>';
                         todoHTML +=         '<div class="todo-item-btns">';
-                        todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');">삭제</button>';
+                        todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');"><i class="fas fa-trash-alt"></i></button>';
                         todoHTML +=         '</div>';
                         todoHTML +=     '</div>';
                         todoHTML += '</div>';
@@ -253,28 +262,30 @@ function fn_cate(type) {
             }
             break;
         case '할 일' : 
-            if(state.todo_list.length > 0) {
+            let IncompleteList = state.todo_list.filter((item) => {
+                if(!item.isComplete) return item;
+            });
+
+            if(IncompleteList.length > 0) {
                 // 미완료 목록 상단
-                for(let i = state.todo_list.length; i > 0; i-- ) {
-                    let item = state.todo_list[i-1];
-                    if(!item.isComplete) {
-                        todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
-                        todoHTML +=     '<div class="todo-item-date">';
-                        todoHTML +=         '<span class="status-incomplete">';
-                        todoHTML +=             '할 일';
-                        todoHTML +=         '</span>';
-                        todoHTML +=         item.date + ' ' + item.time;
-                        todoHTML +=     '</div>'
-                        todoHTML +=     '<div class="todo-item-middle">';
-                        todoHTML +=         '<div class="todo-item-content">';
-                        todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
-                        todoHTML +=         '</div>';
-                        todoHTML +=         '<div class="todo-item-btns">';
-                        todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');">완료</button>';
-                        todoHTML +=         '</div>';
-                        todoHTML +=     '</div>';
-                        todoHTML += '</div>';
-                    }
+                for(let i = IncompleteList.length; i > 0; i-- ) {
+                    let item = IncompleteList[i-1];
+                    todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
+                    todoHTML +=     '<div class="todo-item-date">';
+                    todoHTML +=         '<span class="status-incomplete">';
+                    todoHTML +=             '할 일';
+                    todoHTML +=         '</span>';
+                    todoHTML +=         item.date + ' ' + item.time;
+                    todoHTML +=     '</div>'
+                    todoHTML +=     '<div class="todo-item-middle">';
+                    todoHTML +=         '<div class="todo-item-content">';
+                    todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
+                    todoHTML +=         '</div>';
+                    todoHTML +=         '<div class="todo-item-btns">';
+                    todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');"><i class="fas fa-check-circle"></i></button>';
+                    todoHTML +=         '</div>';
+                    todoHTML +=     '</div>';
+                    todoHTML += '</div>';
                 }
             } else {
                 todoHTML += '<div class="todo-item-blank">';
@@ -283,27 +294,28 @@ function fn_cate(type) {
             }
             break;
         case '완료된 일' : 
-            if(state.todo_list.length > 0) {
-                for(let i = state.todo_list.length; i > 0; i-- ) {
-                    let item = state.todo_list[i-1];
-                    if(item.isComplete) {
-                        todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
-                        todoHTML +=     '<div class="todo-item-date">';
-                        todoHTML +=         '<span class="status-complete">';
-                        todoHTML +=             '완료된 일';
-                        todoHTML +=         '</span>';
-                        todoHTML +=         item.date + ' ' + item.time;
-                        todoHTML +=     '</div>'
-                        todoHTML +=     '<div class="todo-item-middle">';
-                        todoHTML +=         '<div class="todo-item-content complete">';
-                        todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
-                        todoHTML +=         '</div>';
-                        todoHTML +=         '<div class="todo-item-btns">';
-                        todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');">삭제</button>';
-                        todoHTML +=         '</div>';
-                        todoHTML +=     '</div>';
-                        todoHTML += '</div>';
-                    }
+            let completeList = state.todo_list.filter((item) => {
+                if(item.isComplete) return item;
+            });
+            if(completeList.length > 0) {
+                for(let i = completeList.length; i > 0; i-- ) {
+                    let item = completeList[i-1];
+                    todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
+                    todoHTML +=     '<div class="todo-item-date">';
+                    todoHTML +=         '<span class="status-complete">';
+                    todoHTML +=             '완료된 일';
+                    todoHTML +=         '</span>';
+                    todoHTML +=         item.date + ' ' + item.time;
+                    todoHTML +=     '</div>'
+                    todoHTML +=     '<div class="todo-item-middle">';
+                    todoHTML +=         '<div class="todo-item-content complete">';
+                    todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
+                    todoHTML +=         '</div>';
+                    todoHTML +=         '<div class="todo-item-btns">';
+                    todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');"><i class="fas fa-trash-alt"></i></button>';
+                    todoHTML +=         '</div>';
+                    todoHTML +=     '</div>';
+                    todoHTML += '</div>';
                 }
             } else {
                 todoHTML += '<div class="todo-item-blank">';
