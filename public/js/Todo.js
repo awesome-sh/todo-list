@@ -16,21 +16,18 @@ function refreshTodo() {
     let todoHTML = "";
 
     if(localStorage.getItem('todo_list')) {
-        let undecodeList = JSON.parse(localStorage.getItem('todo_list'));
-        
-        undecodeList.filter((row, idx) => {
-            state.todo_list.push(JSON.parse(decodeURI(row)));
-        });
+        state.todo_list = JSON.parse(decodeURI(localStorage.getItem('todo_list')));
+        console.log(state.todo_list);
 
         if(state.todo_list.length > 0) {
             // 미완료 목록 상단
             for(let i = state.todo_list.length; i > 0; i-- ) {
                 let item = state.todo_list[i-1];
                 if(!item.isComplete) {
-                    todoHTML += '<div class="todo-item">';
+                    todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
                     todoHTML +=     '<div class="todo-item-date">';
                     todoHTML +=         '<span class="status-incomplete">';
-                    todoHTML +=             item.isComplete ? 'Complete' : 'Incomplete';
+                    todoHTML +=             item.isComplete ? '완료된 일' : '할 일';
                     todoHTML +=         '</span>';
                     todoHTML +=         item.date + ' ' + item.time;
                     todoHTML +=     '</div>'
@@ -39,39 +36,42 @@ function refreshTodo() {
                     todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                     todoHTML +=         '</div>';
                     todoHTML +=         '<div class="todo-item-btns">';
-                    // todoHTML +=             '<button>삭제</button>';
-                    todoHTML +=             '<button onclick="fn_complete(' + item.index + ');">완료</button>';
+                    todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');">완료</button>';
                     todoHTML +=         '</div>';
                     todoHTML +=     '</div>';
                     todoHTML += '</div>';
                 }
             }
+
+            // 완료목록 분기
+            todoHTML += '<div class="complete-todo-line">완료된 일</div>';
+
             // 완료 목록 하단
             for(let i = state.todo_list.length; i > 0; i-- ) {
-                let item = decodeURI(state.todo_list[i-1]);
+                let item = state.todo_list[i-1];
                 if(item.isComplete) {
-                    todoHTML += '<div class="todo-item">';
+                    
+                    todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
                     todoHTML +=     '<div class="todo-item-date">';
                     todoHTML +=         '<span class="status-complete">';
-                    todoHTML +=             item.isComplete ? 'Complete' : 'Incomplete';
+                    todoHTML +=             item.isComplete ? '완료된 일' : '할 일';
                     todoHTML +=         '</span>';
                     todoHTML +=         item.date + ' ' + item.time;
                     todoHTML +=     '</div>'
                     todoHTML +=     '<div class="todo-item-middle">';
-                    todoHTML +=         '<div class="todo-item-content">';
+                    todoHTML +=         '<div class="todo-item-content complete">';
                     todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                     todoHTML +=         '</div>';
                     todoHTML +=         '<div class="todo-item-btns">';
-                    todoHTML +=             '<button onclick="fn_delete(' + item.index + ');">삭제</button>';
-                    // todoHTML +=             '<button>완료</button>';
+                    todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');">삭제</button>';
                     todoHTML +=         '</div>';
                     todoHTML +=     '</div>';
                     todoHTML += '</div>';
                 }
             }
         } else {
-            todoHTML += '<div class="todo-item">';
-            todoHTML +=     '할일 목록이 없습니다.<br/>Add ToDo 버튼을 눌러 할일을 생성해보세요.';
+            todoHTML += '<div class="todo-item-blank">';
+            todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할일을 생성해보세요.';
             todoHTML += '</div>';
         }
         
@@ -89,15 +89,197 @@ function refreshTodo() {
  * @param {*} todoIndex 
  */
 function fn_complete(todoIndex) {
+    console.log(">> Complete Todo");
     let prevTodoList = state.todo_list;
-    prevTodoList[todoIndex].isComplete = true;
-    let nextTodoList = [];
-    nextTodoList.push(encodeURI(JSON.stringify(prevTodoList)));
-    console.log(nextTodoList);
-    localStorage.setItem('todo_list', nextTodoList);
+    prevTodoList.forEach((row) => {
+        if(row.index === todoIndex) {
+            row.isComplete = true;
+        }
+    });
+    localStorage.setItem('todo_list', encodeURI(JSON.stringify(prevTodoList)));
     refreshTodo();
 }
 
+
+/**
+ * 완료된 항목 삭제하기
+ * @param {*} todoIndex 
+ */
+function fn_remove(todoIndex) {
+    console.log(">> Remove Todo", todoIndex);
+    let nextTodoList = state.todo_list.filter((item) => {
+        if(item.index !== todoIndex) {
+            return item;
+        }
+    });
+
+    localStorage.setItem('todo_list', encodeURI(JSON.stringify(nextTodoList)));
+    refreshTodo();
+}
+
+
+/**
+ * Notification
+ * @param {Number} type
+ */
+function fn_alert(message, type) {
+    let alertDiv = document.createElement('div');
+    alertDiv.className = (type === 'notice' ? 'alert-notice' : 'alert');
+
+    let alertHTML = "";
+    if(type === 'notice') {
+        alertHTML += message;
+    } else {
+        alertHTML += message;
+    }
+
+    alertDiv.innerHTML = alertHTML;
+    document.body.appendChild(alertDiv);
+    setTimeout(() => {
+        alertDiv.style.bottom = '0px';
+        setTimeout(() => {
+            alertDiv.style.bottom = '-60px';
+        }, 2500);
+    }, 300);
+    
+}
+
+
+
+/**
+ * Category Change Handler
+ */
+function fn_cate(type) {
+    let todoHTML = "";
+
+    switch(type) {
+        case '모두' :
+            if(state.todo_list.length > 0) {
+                // 미완료 목록 상단
+                for(let i = state.todo_list.length; i > 0; i-- ) {
+                    let item = state.todo_list[i-1];
+                    if(!item.isComplete) {
+                        todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
+                        todoHTML +=     '<div class="todo-item-date">';
+                        todoHTML +=         '<span class="status-incomplete">';
+                        todoHTML +=             item.isComplete ? '완료된 일' : '할 일';
+                        todoHTML +=         '</span>';
+                        todoHTML +=         item.date + ' ' + item.time;
+                        todoHTML +=     '</div>'
+                        todoHTML +=     '<div class="todo-item-middle">';
+                        todoHTML +=         '<div class="todo-item-content">';
+                        todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
+                        todoHTML +=         '</div>';
+                        todoHTML +=         '<div class="todo-item-btns">';
+                        todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');">완료</button>';
+                        todoHTML +=         '</div>';
+                        todoHTML +=     '</div>';
+                        todoHTML += '</div>';
+                    }
+                }
+    
+                // 완료목록 분기
+                todoHTML += '<div class="complete-todo-line">Complete</div>';
+    
+                // 완료 목록 하단
+                for(let i = state.todo_list.length; i > 0; i-- ) {
+                    let item = state.todo_list[i-1];
+                    if(item.isComplete) {
+                        
+                        todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
+                        todoHTML +=     '<div class="todo-item-date">';
+                        todoHTML +=         '<span class="status-complete">';
+                        todoHTML +=             item.isComplete ? '완료된 일' : '할 일';
+                        todoHTML +=         '</span>';
+                        todoHTML +=         item.date + ' ' + item.time;
+                        todoHTML +=     '</div>'
+                        todoHTML +=     '<div class="todo-item-middle">';
+                        todoHTML +=         '<div class="todo-item-content complete">';
+                        todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
+                        todoHTML +=         '</div>';
+                        todoHTML +=         '<div class="todo-item-btns">';
+                        todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');">삭제</button>';
+                        todoHTML +=         '</div>';
+                        todoHTML +=     '</div>';
+                        todoHTML += '</div>';
+                    }
+                }
+            } else {
+                todoHTML += '<div class="todo-item-blank">';
+                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할일을 생성해보세요.';
+                todoHTML += '</div>';
+            }
+            break;
+        case '할 일' : 
+            if(state.todo_list.length > 0) {
+                // 미완료 목록 상단
+                for(let i = state.todo_list.length; i > 0; i-- ) {
+                    let item = state.todo_list[i-1];
+                    if(!item.isComplete) {
+                        todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
+                        todoHTML +=     '<div class="todo-item-date">';
+                        todoHTML +=         '<span class="status-incomplete">';
+                        todoHTML +=             '할 일';
+                        todoHTML +=         '</span>';
+                        todoHTML +=         item.date + ' ' + item.time;
+                        todoHTML +=     '</div>'
+                        todoHTML +=     '<div class="todo-item-middle">';
+                        todoHTML +=         '<div class="todo-item-content">';
+                        todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
+                        todoHTML +=         '</div>';
+                        todoHTML +=         '<div class="todo-item-btns">';
+                        todoHTML +=             '<button class="btn-complete" onclick="fn_complete(' + item.index + ');">완료</button>';
+                        todoHTML +=         '</div>';
+                        todoHTML +=     '</div>';
+                        todoHTML += '</div>';
+                    }
+                }
+            } else {
+                todoHTML += '<div class="todo-item-blank">';
+                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할일을 생성해보세요.';
+                todoHTML += '</div>';
+            }
+            break;
+        case '완료된 일' : 
+            if(state.todo_list.length > 0) {
+                for(let i = state.todo_list.length; i > 0; i-- ) {
+                    let item = state.todo_list[i-1];
+                    if(item.isComplete) {
+                        todoHTML +=  state.styleMode === 'Dark' ? '<div class="todo-item-dark">' : '<div class="todo-item">';
+                        todoHTML +=     '<div class="todo-item-date">';
+                        todoHTML +=         '<span class="status-complete">';
+                        todoHTML +=             '완료된 일';
+                        todoHTML +=         '</span>';
+                        todoHTML +=         item.date + ' ' + item.time;
+                        todoHTML +=     '</div>'
+                        todoHTML +=     '<div class="todo-item-middle">';
+                        todoHTML +=         '<div class="todo-item-content complete">';
+                        todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
+                        todoHTML +=         '</div>';
+                        todoHTML +=         '<div class="todo-item-btns">';
+                        todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');">삭제</button>';
+                        todoHTML +=         '</div>';
+                        todoHTML +=     '</div>';
+                        todoHTML += '</div>';
+                    }
+                }
+            } else {
+                todoHTML += '<div class="todo-item-blank">';
+                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할일을 생성해보세요.';
+                todoHTML += '</div>';
+            }
+            break;
+    }
+
+    const appMiddle = document.querySelector('#app-middle');
+    appMiddle.innerHTML = todoHTML;
+}
+
+
+
+/**
+ * DOM Load End
+ */
 window.onload = () => {
     //Initialize
     refreshTodo();
@@ -117,7 +299,6 @@ window.onload = () => {
         const appContainer = document.querySelector('#AppContainer');
         const appComponent = document.querySelector('#app-component');
         const toggleBtns = document.querySelector('#style-mode-toggle').children;
-        console.log(toggleBtns);
         
         if(state.styleMode === 'Dark') {
             toggleBtns[0].classList.remove('mode-select');
@@ -128,6 +309,13 @@ window.onload = () => {
 
             appComponent.classList.remove("app-component");
             appComponent.classList.add("app-component-dark");
+
+            const todoItems = document.querySelectorAll('.todo-item');
+            todoItems.forEach((item) => {
+                item.classList.remove('todo-item');
+                item.classList.add('todo-item-dark');
+            });
+
         } else {
             toggleBtns[1].classList.remove('mode-select');
             toggleBtns[0].classList.add('mode-select');
@@ -137,7 +325,51 @@ window.onload = () => {
 
             appComponent.classList.remove("app-component-dark");
             appComponent.classList.add("app-component");
+
+            const todoItems = document.querySelectorAll('.todo-item-dark');
+            todoItems.forEach((item) => {
+                item.classList.remove('todo-item-dark');
+                item.classList.add('todo-item');
+            });
         }
+    });
+
+    /**
+     * Popup Event
+     * @param {} flag 
+     */
+    function addTodoPopup(flag) {
+        if(flag) {
+            state.isWriting = !state.isWriting;
+            backBlur.style.height = '100%';
+            addComponent.style.left = '50%';
+            addComponent.style.opacity = 1;
+        } else {
+            state.isWriting = !state.isWriting;
+            backBlur.style.height = '0%';
+            addComponent.style.left = '-50%';
+            addComponent.style.opacity = 0;
+        }
+    }
+
+    /**
+     * Category Change
+     */
+    const cateEL = document.querySelector('#app-cate');
+    cateEL.addEventListener('click', (e) => {
+        let target = e.target.innerText;
+
+        if(target.length > 10) {
+            return;
+        }
+        
+        let cateBtns = cateEL.children;
+        for (let item of cateBtns) {
+            item.classList.remove('selected');
+        }
+        
+        e.target.classList.add('selected');
+        fn_cate(target);
     });
 
 
@@ -150,21 +382,13 @@ window.onload = () => {
     const addComponent = document.querySelector('#add-todo-component');
 
     addBtn.addEventListener('click', () => {
-        if(!state.isWriting) {
-            state.isWriting = !state.isWriting;
-            backBlur.style.height = '100%';
-            addComponent.style.left = '50%';
-            addComponent.style.opacity = 1;
-        }
+        addTodoPopup(true);
+        console.log(">> Add ToDo Popup");
+        console.log(state.isWriting);
     });
 
     backBlur.addEventListener('click', () => {
-        if(state.isWriting) {
-            state.isWriting = !state.isWriting;
-            backBlur.style.height = '0%';
-            addComponent.style.left = '-50%';
-            addComponent.style.opacity = 0;
-        }
+        addTodoPopup(false);
     });
 
     submitBtn.addEventListener('click', () => {
@@ -194,8 +418,8 @@ window.onload = () => {
             return;
         }
 
-        let todo_list = JSON.parse(localStorage.getItem('todo_list'));
-        const tempIndex = todo_list.length;
+        // 인덱스 생성을 위해 투두리스트 배열길이 세팅
+        const tempIndex = state.todo_list.length;
 
         // 줄바꿈 처리
         tempTodo.replace(/\n/g, '<br/>');
@@ -208,14 +432,11 @@ window.onload = () => {
             isComplete: false,
         };
         
-        let encodeTodo = encodeURI(JSON.stringify(todo));
-        todo_list.push(encodeTodo);
-        localStorage.setItem('todo_list', JSON.stringify(todo_list));
+        console.log(state.todo_list);
+        state.todo_list.push(todo);
+        localStorage.setItem('todo_list', encodeURI(JSON.stringify(state.todo_list)));
 
-        state.isWriting = !state.isWriting;
-        backBlur.style.height = '0';
-        addComponent.style.left = '-50%';
-        addComponent.style.opacity = 0;
+        addTodoPopup(false);
         refreshTodo();
     });
 };

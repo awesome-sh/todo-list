@@ -5,8 +5,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 
 html, body {
+    position: absolute;
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 * {
@@ -80,7 +84,7 @@ html, body {
 */
 .app-component {
     position: absolute;
-    width: 800px;
+    width: 1000px;
     top: 50%;
     left: 50%;
     border-radius: 10px;
@@ -100,7 +104,7 @@ html, body {
 
 .app-component-dark {
     position: absolute;
-    width: 800px;
+    width: 1000px;
     top: 50%;
     left: 50%;
     border-radius: 10px;
@@ -132,11 +136,11 @@ html, body {
 }
 
 .app-top .app-top-left {
-    padding-left: 20px;
+    padding-left: 30px;
     width: 80%;
     line-height: 80px;
     color: #9a4efd;
-    font-size: 21px;
+    font-size: 25px;
     font-weight: 500;
     text-align: left;
     
@@ -177,8 +181,9 @@ html, body {
     height: 35px;
 }
 
-.app-cate > div::before {
-    content: '#'
+.selected {
+    color: #fff;
+    background-color: #8a47e0;
 }
 
 .app-cate > div {
@@ -203,14 +208,15 @@ html, body {
 .app-middle {
     width: 100%;
     height: 600px;
-    text-align: center;
+    text-align: left;
+    padding-left: 15px;
     overflow: auto;
 }
 
 .app-bottom {
     height: 60px;
     line-height: 60px;
-    border-top: 1px solid #eee;
+    font-size: 12px;
     text-align: center;
 }
 
@@ -219,10 +225,31 @@ html, body {
 */
 .todo-item {
     display: inline-block;
-    width: 95%;
-    margin: 15px 0 15px 0;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
+    width: 30%;
+    margin: 15px;
+    border: 1px solid #eee;
+    padding: 5px;
+}
+
+.todo-item-blank {
+    width: 100%;
+    padding-top: 150px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.todo-item-blank i {
+    font-size: 80px;
+    margin-bottom: 10px;
+    color: #eee;
+}
+
+.todo-item-dark {
+    display: inline-block;
+    width: 30%;
+    margin: 15px;
+    border: 1px solid #2d3041;
+    padding: 5px;
 }
 
 .status-complete {
@@ -230,7 +257,7 @@ html, body {
     margin-right: 10px;
     border-radius: 5px;
     color: #333;
-    background-color: rgb(221, 247, 207);
+    background-color: #d5bff1;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -242,7 +269,7 @@ html, body {
     margin-right: 10px;
     border-radius: 5px;
     color: #333;
-    background-color: rgb(247, 213, 213);
+    background-color: #f7f1ff;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -250,23 +277,22 @@ html, body {
 }
 
 .todo-item-date {
-    margin-top: 15px;
     width: 100%;
     text-align: left;
     font-size: 12px;
     height: 30px;
     line-height: 30px;
-    padding-left: 15px;
+    padding-left: 5px;
     margin-bottom: 10px;
 }
-
 
 .todo-item-middle {
     display: flex;
     width: 100%;
     text-align: left;
-    font-size: 14px;
-    padding-left: 25px;
+    font-size: 13px;
+    padding-left: 15px;
+    line-height: 30px;
 }
 
 .todo-item-content {
@@ -275,7 +301,6 @@ html, body {
 
 .todo-item-btns {
     width: 20%;
-    padding-right: 15px;
     vertical-align: middle;
     text-align: right;
 }
@@ -295,13 +320,32 @@ html, body {
     margin-bottom: 10px;
 }
 
-.todo-item-btns button:nth-child(1) {
-    background-color: #e9e9e9;
-}
-
-.todo-item-btns button:nth-child(2) {
+.todo-item-btns button.btn-complete {
     color: #eee;
     background-color: #7a31da;
+}
+
+.todo-item-btns button.btn-remove {
+    color: #eee;
+    background-color: #da3131;
+}
+
+.complete-todo-line {
+    width: 98%;
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+    padding-left: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.complete {
+    text-decoration: line-through;
 }
 
 /**
@@ -409,4 +453,39 @@ html, body {
 
 #addTodoFrm button:hover {
     background-color: #6822c4;
+}
+
+/**
+* Alert Styling
+*/
+.alert {
+    z-index: 1000;
+    position: absolute;
+    width: 90%;
+    height: 60px;
+    bottom: 0;
+    color: #fff;
+    background-color: rgba(126, 43, 235, 0.933);
+    transition: all 0.7s ease-out;
+    -webkit-transition: all 0.7s ease-out;
+    -moz-transition: all 0.7s ease-out;
+    -ms-transition: all 0.7s ease-out;
+    -o-transition: all 0.7s ease-out;
+}
+
+.alert-notice {
+    z-index: 1000;
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    bottom: -60px;
+    color: #fff;
+    text-align: center;
+    background-color:  rgba(126, 43, 235, 0.933);
+    transition: all 0.7s ease-out;
+    -webkit-transition: all 0.7s ease-out;
+    -moz-transition: all 0.7s ease-out;
+    -ms-transition: all 0.7s ease-out;
+    -o-transition: all 0.7s ease-out;
 }

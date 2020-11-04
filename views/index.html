@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do Application, By Park Sung Hwa</title>
     <link rel="stylesheet" href="/css/style.css"/>
+    <!-- Add Fontawesome -->
+    <link href="/css/fontawesome/fontawesome.css" rel="stylesheet">
+    <link href="/css/fontawesome/all.css" rel="stylesheet">
+    <script defer src="/css/fontawesome/js/all.js"></script>
 </head>
 <body>
     <div id="AppContainer" class="AppContainer">
@@ -14,24 +18,24 @@
             <div class="mode-select">Light</div>
             <div>Dark</div>
         </div>
-
-        <div id="app-component" class="app-component">
+        
+        <div id="app-component" class="app-component" draggable="true">
             <div class="app-top">
-                <div class="app-top-left">Sihus To-Do Application</div>
+                <div class="app-top-left"><i class="far fa-sticky-note"></i> To-Do</div>
                 <div class="app-top-right">
-                    <div id="addTodo">+ Add ToDo</div>
+                    <div id="addTodo"><i class="fas fa-pencil-alt"></i>  할일 추가하기</div>
                 </div>
             </div>
-            <div class="app-cate">
-                <div> All</div>
-                <div> Incomplete</div>
-                <div> Complete</div>
+            <div id="app-cate" class="app-cate">
+                <div class="selected">모두</div>
+                <div>할 일</div>
+                <div>완료된 일</div>
             </div>
             <div id="app-middle" class="app-middle">
 
             </div>
             <div class="app-bottom">
-                Application Bottom
+                Developer Park Sung Hwa (sihus@naver.com)
             </div>
         </div>
 

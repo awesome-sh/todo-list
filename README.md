@@ -1,2 +1,2 @@
 # todo-list
-To-Do Application by SungHwa
+To-Do Application Based On Vanila JS
