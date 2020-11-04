@@ -18,6 +18,24 @@ html, body {
     box-sizing: border-box;
 }
 
+b {
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #fff;
+    border: 1px solid rgb(128, 50, 230);
+    background-color: rgb(154, 78, 253);
+}
+
+button {
+    cursor: pointer;
+    outline: none;
+    transition: all 0.5s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+}
+
 ::selection {
     color: #fff !important;
     background-color: rgb(154, 78, 253) !important;
@@ -306,7 +324,6 @@ html, body {
 }
 
 .todo-item-btns button {
-    cursor: pointer;
     width: 50px;
     height: 30px;
     font-size: 12px;
@@ -444,11 +461,6 @@ html, body {
     padding-left: none;
     color: #fff;
     background-color: #7a31da;
-    transition: all 0.5s ease-out;
-    -webkit-transition: all 0.5s ease-out;
-    -moz-transition: all 0.5s ease-out;
-    -ms-transition: all 0.5s ease-out;
-    -o-transition: all 0.5s ease-out;
 }
 
 #addTodoFrm button:hover {
@@ -473,7 +485,7 @@ html, body {
     -o-transition: all 0.7s ease-out;
 }
 
-.alert-notice {
+.notice {
     z-index: 1000;
     position: absolute;
     width: 100%;
@@ -489,4 +501,60 @@ html, body {
     -moz-transition: all 0.7s ease-out;
     -ms-transition: all 0.7s ease-out;
     -o-transition: all 0.7s ease-out;
+}
+
+.confirm {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    z-index: 200;
+    opacity: 0;
+    width: 300px;
+    height: 150px;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 15px;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    transition: all 0.5s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    padding: 25px 15px 25px 15px;
+}
+
+.confirm i {
+    font-size: 30px;
+    color: rgba(126, 43, 235, 0.849);
+}
+
+.confirm button {
+    width: 80px;
+    height: 30px;
+    border: none;
+    margin: 5px;
+}
+
+.confirm button#confirm-delete {
+    color: #fff;
+    background-color: #7a31da;
+}
+
+.confirm button#confirm-delete:hover {
+    color: #fff;
+    background-color: #5700c9;
+}
+.confirm button:hover {
+    color: #fff;
+    background-color: #bd2222;
 }

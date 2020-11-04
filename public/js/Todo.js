@@ -4,6 +4,8 @@
 const state = {
     styleMode: 'light',
     isWriting: false,
+    isConfirm: false,
+    isDelete: false,
     todo_list: [],
 };
 
@@ -101,20 +103,29 @@ function fn_complete(todoIndex) {
 }
 
 
+
 /**
  * 완료된 항목 삭제하기
  * @param {*} todoIndex 
  */
 function fn_remove(todoIndex) {
     console.log(">> Remove Todo", todoIndex);
-    let nextTodoList = state.todo_list.filter((item) => {
-        if(item.index !== todoIndex) {
-            return item;
-        }
-    });
+    let message = '<i class="fas fa-exclamation"></i><br>';
+    message += '해당 항목을 완전히 <b>삭제</b>하시겠습니까?<br>';
+    message += '<button type="button" id="confirm-cancle" onclick="fn_confirm_cancle()";>취소</button>';
+    message += '<button type="button" id="confirm-delete" onclick="fn_confirm_ok()">삭제</button>';
 
-    localStorage.setItem('todo_list', encodeURI(JSON.stringify(nextTodoList)));
-    refreshTodo();
+    fn_confirm(message);
+
+    // let nextTodoList = state.todo_list.filter((item) => {
+    //     if(item.index !== todoIndex) {
+    //         return item;
+    //     }
+    // });
+
+    // localStorage.setItem('todo_list', encodeURI(JSON.stringify(nextTodoList)));
+    // refreshTodo();
+    
 }
 
 
@@ -122,28 +133,59 @@ function fn_remove(todoIndex) {
  * Notification
  * @param {Number} type
  */
-function fn_alert(message, type) {
+function fn_notice(message) {
     let alertDiv = document.createElement('div');
-    alertDiv.className = (type === 'notice' ? 'alert-notice' : 'alert');
-
-    let alertHTML = "";
-    if(type === 'notice') {
-        alertHTML += message;
-    } else {
-        alertHTML += message;
-    }
-
+    alertDiv.className = 'notice';
+    let alertHTML = message;
     alertDiv.innerHTML = alertHTML;
     document.body.appendChild(alertDiv);
     setTimeout(() => {
         alertDiv.style.bottom = '0px';
         setTimeout(() => {
             alertDiv.style.bottom = '-60px';
+            document.body.removeChild(alertDiv);
         }, 2500);
     }, 300);
-    
 }
 
+
+/**
+ * Confirm
+ * @param {*} type 
+ */
+function fn_confirm(message) {
+    const backBlur = document.querySelector('#backBlur');
+    let confirmDiv = document.createElement('div');
+    confirmDiv.className = 'confirm';
+    let confirmHTML = message;
+    confirmDiv.innerHTML = confirmHTML;
+    document.body.appendChild(confirmDiv);
+    confirmDiv.style.top = '50%';
+    confirmDiv.style.opacity = 1;
+    backBlur.style.height = '100%';
+}
+
+/**
+ * Confirm Cancle
+ * @param {*} todoIndex 
+ */
+function fn_confirm_cancle() {
+    const confirmPopup = document.getElementsByClassName('confirm');
+    const backBlur = document.querySelector('#backBlur');
+    document.body.removeChild(confirmPopup[0]);
+    backBlur.style.height = '0';
+}
+
+/**
+ * Confirm Ok
+ * @param {*} todoIndex 
+ */
+function fn_confirm_ok() {
+    const confirmPopup = document.getElementsByClassName('confirm');
+    const backBlur = document.querySelector('#backBlur');
+    document.body.removeChild(confirmPopup[0]);
+    backBlur.style.height = '0';
+}
 
 
 /**
@@ -334,23 +376,7 @@ window.onload = () => {
         }
     });
 
-    /**
-     * Popup Event
-     * @param {} flag 
-     */
-    function addTodoPopup(flag) {
-        if(flag) {
-            state.isWriting = !state.isWriting;
-            backBlur.style.height = '100%';
-            addComponent.style.left = '50%';
-            addComponent.style.opacity = 1;
-        } else {
-            state.isWriting = !state.isWriting;
-            backBlur.style.height = '0%';
-            addComponent.style.left = '-50%';
-            addComponent.style.opacity = 0;
-        }
-    }
+    
 
     /**
      * Category Change
@@ -381,6 +407,24 @@ window.onload = () => {
     const submitBtn = document.querySelector('#submitBtn');
     const addComponent = document.querySelector('#add-todo-component');
 
+    /**
+     * Popup Event
+     * @param {} flag 
+     */
+    function addTodoPopup(flag) {
+        if(flag) {
+            state.isWriting = !state.isWriting;
+            backBlur.style.height = '100%';
+            addComponent.style.left = '50%';
+            addComponent.style.opacity = 1;
+        } else {
+            state.isWriting = !state.isWriting;
+            backBlur.style.height = '0%';
+            addComponent.style.left = '-50%';
+            addComponent.style.opacity = 0;
+        }
+    }
+
     addBtn.addEventListener('click', () => {
         addTodoPopup(true);
         console.log(">> Add ToDo Popup");
@@ -388,7 +432,7 @@ window.onload = () => {
     });
 
     backBlur.addEventListener('click', () => {
-        addTodoPopup(false);
+        if(state.isWriting) addTodoPopup(false);
     });
 
     submitBtn.addEventListener('click', () => {
@@ -437,7 +481,7 @@ window.onload = () => {
         localStorage.setItem('todo_list', encodeURI(JSON.stringify(state.todo_list)));
 
         addTodoPopup(false);
-        fn_alert('성공적으로 할 일을 추가했습니다.', 'notice');
+        fn_notice('성공적으로 할 일을 추가했습니다.');
         refreshTodo();
     });
 };
