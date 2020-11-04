@@ -110,10 +110,10 @@ function fn_complete(todoIndex) {
  */
 function fn_remove(todoIndex) {
     console.log(">> Remove Todo", todoIndex);
-    let message = '<i class="fas fa-exclamation"></i><br>';
+    let message = '<i class="fas fa-exclamation-triangle"></i><br>';
     message += '해당 항목을 완전히 <b>삭제</b>하시겠습니까?<br>';
     message += '<button type="button" id="confirm-cancle" onclick="fn_confirm_cancle()";>취소</button>';
-    message += '<button type="button" id="confirm-delete" onclick="fn_confirm_ok(' + todoIndex + ')"><i class="fas fa-trash-alt"></i></button>';
+    message += '<button type="button" id="confirm-delete" onclick="fn_confirm_ok(' + todoIndex + ')">삭제</button>';
 
     fn_confirm(message);
 
@@ -143,9 +143,11 @@ function fn_notice(message) {
         alertDiv.style.bottom = '0px';
         setTimeout(() => {
             alertDiv.style.bottom = '-60px';
-            document.body.removeChild(alertDiv);
+            setTimeout(() => {
+                document.body.removeChild(alertDiv);
+            }, 1000);
         }, 2500);
-    }, 300);
+    }, 200);
 }
 
 
@@ -181,15 +183,16 @@ function fn_confirm_cancle() {
  * @param {*} todoIndex 
  */
 function fn_confirm_ok(todoIndex) {
+    console.log(todoIndex);
+    console.log(typeof todoIndex);
+
     const confirmPopup = document.getElementsByClassName('confirm');
     const backBlur = document.querySelector('#backBlur');
     document.body.removeChild(confirmPopup[0]);
     backBlur.style.height = '0';
     
     let nextTodoList = state.todo_list.filter((item) => {
-        if(item.index !== todoIndex) {
-            return item;
-        }
+        if(item.index !== todoIndex) return item;
     });
 
     localStorage.setItem('todo_list', encodeURI(JSON.stringify(nextTodoList)));
@@ -459,17 +462,17 @@ window.onload = () => {
          * Validation
          */
         if(tempDate === null || tempDate === '') {
-            alert('날짜를 선택해주세요');
+            fn_notice('<i class="fas fa-exclamation-circle"></i> 날짜를 선택해주세요');
             document.querySelector('#form-date').focus();
             return;
         }
         if(tempTime === null || tempTime === '') {
-            alert('시간을 선택해주세요');
+            fn_notice('<i class="fas fa-exclamation-circle"></i> 시간을 선택해주세요');
             document.querySelector('#form-time').focus();
             return;
         }
         if(tempTodo === null || tempTodo === '') {
-            alert('할일을 입력해주세요');
+            fn_notice('<i class="fas fa-exclamation-circle"></i> 할일을 입력해주세요');
             document.querySelector('#form-todo').focus();
             return;
         }

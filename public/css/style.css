@@ -510,7 +510,7 @@ button {
     z-index: 200;
     opacity: 0;
     width: 300px;
-    height: 150px;
+    height: 180px;
     font-size: 14px;
     line-height: 30px;
     text-align: center;
@@ -534,8 +534,9 @@ button {
 }
 
 .confirm i {
-    font-size: 30px;
+    font-size: 48px;
     color: rgba(126, 43, 235, 0.849);
+    margin-bottom: 15px;
 }
 
 .confirm button {
