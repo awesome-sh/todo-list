@@ -437,6 +437,7 @@ window.onload = () => {
         localStorage.setItem('todo_list', encodeURI(JSON.stringify(state.todo_list)));
 
         addTodoPopup(false);
+        fn_alert('성공적으로 할 일을 추가했습니다.', 'notice');
         refreshTodo();
     });
 };

@@ -481,8 +481,9 @@ html, body {
     line-height: 60px;
     bottom: -60px;
     color: #fff;
+    font-size: 15px;
     text-align: center;
-    background-color:  rgba(126, 43, 235, 0.933);
+    background-color:  rgba(126, 43, 235, 0.849);
     transition: all 0.7s ease-out;
     -webkit-transition: all 0.7s ease-out;
     -moz-transition: all 0.7s ease-out;
