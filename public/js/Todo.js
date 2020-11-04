@@ -2,7 +2,10 @@
  * Light, Dark Mode 전환
  */
 const state = {
+    nickname: null,
+    isInitial: false,
     styleMode: 'light',
+    currentCate: '모아보기',
     isWriting: false,
     isConfirm: false,
     isDelete: false,
@@ -10,8 +13,7 @@ const state = {
 };
 
 function refreshTodo() {
-    console.info(">> Refresh Todo List");
-    console.log(state.todo_list);
+    // console.info(">> Refresh Todo List");
     /**
      * Local Storage 할일 목록 초기화
      */
@@ -19,7 +21,9 @@ function refreshTodo() {
 
     if(localStorage.getItem('todo_list')) {
         state.todo_list = JSON.parse(decodeURI(localStorage.getItem('todo_list')));
-        console.log(state.todo_list);
+        state.nickname = decodeURI(localStorage.getItem('nickname'));
+
+        document.querySelector('#user-nickname').innerText = state.nickname;
 
         if(state.todo_list.length > 0) {
             // 미완료 목록 상단
@@ -65,6 +69,7 @@ function refreshTodo() {
                     todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                     todoHTML +=         '</div>';
                     todoHTML +=         '<div class="todo-item-btns">';
+                    todoHTML +=             '<button class="btn-incomplete" onclick="fn_incomplete(' + item.index + ');"><i class="fas fa-undo-alt"></i></button>';
                     todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');"><i class="fas fa-trash-alt"></i></button>';
                     todoHTML +=         '</div>';
                     todoHTML +=     '</div>';
@@ -78,13 +83,34 @@ function refreshTodo() {
         }
         
     } else {
-        localStorage.setItem('todo_list', JSON.stringify([]));
+        state.isInitial = true;
+
+        const whiteBlur = document.querySelector('#whiteBlur');
+        const intro = document.querySelector('#initial');
+        const introSection = document.querySelector('#intro-section');
+
+        whiteBlur.style.width = '100%';
+        intro.style.display = 'block';
+        intro.style.opacity = 1;
+
+        let introCount = 0;
+        let introTop = 0;
+        
+        let introInterval = setInterval(() => {
+            if(introCount === introSection.children.length-1) {
+                clearInterval(introInterval);
+            }
+            introSection.children[introCount].style.opacity = 1;
+            introSection.children[introCount].style.top = introTop + 'px';
+            introSection.children[introCount].style.left = 0;
+            introCount++;
+            introTop = introTop + 40;
+        }, 1000);
     }
 
     const appMiddle = document.querySelector('#app-middle');
     appMiddle.innerHTML = todoHTML;
 }
-
 
 /**
  * 선택한 항목 할일 완료 처리하기
@@ -95,14 +121,30 @@ function fn_complete(todoIndex) {
     let prevTodoList = state.todo_list;
     prevTodoList.forEach((row) => {
         if(row.index === todoIndex) {
-            row.isComplete = true;
+            row.isComplete = !row.isComplete;
         }
     });
     localStorage.setItem('todo_list', encodeURI(JSON.stringify(prevTodoList)));
     refreshTodo();
+    fn_cate(state.currentCate);
 }
 
 
+/**
+ * 완료된 항목 다시 미완료로 돌리기
+ * @param {*} todoIndex 
+ */
+function fn_incomplete(todoIndex) {
+    let prevTodoList = state.todo_list;
+    prevTodoList.forEach((row) => {
+        if(row.index === todoIndex) {
+            row.isComplete = !row.isComplete;
+        }
+    });
+    localStorage.setItem('todo_list', encodeURI(JSON.stringify(prevTodoList)));
+    refreshTodo();
+    fn_cate(state.currentCate);
+}
 
 /**
  * 완료된 항목 삭제하기
@@ -116,16 +158,7 @@ function fn_remove(todoIndex) {
     message += '<button type="button" id="confirm-delete" onclick="fn_confirm_ok(' + todoIndex + ')">삭제</button>';
 
     fn_confirm(message);
-
-    // let nextTodoList = state.todo_list.filter((item) => {
-    //     if(item.index !== todoIndex) {
-    //         return item;
-    //     }
-    // });
-
-    // localStorage.setItem('todo_list', encodeURI(JSON.stringify(nextTodoList)));
-    // refreshTodo();
-    
+    fn_cate(state.currentCate);
 }
 
 
@@ -197,6 +230,7 @@ function fn_confirm_ok(todoIndex) {
 
     localStorage.setItem('todo_list', encodeURI(JSON.stringify(nextTodoList)));
     refreshTodo();
+    fn_cate(state.currentCate);
 }
 
 
@@ -208,6 +242,7 @@ function fn_cate(type) {
 
     switch(type) {
         case '모아보기' :
+            state.currentCate = type;
             if(state.todo_list.length > 0) {
                 // 미완료 목록 상단
                 for(let i = state.todo_list.length; i > 0; i-- ) {
@@ -252,6 +287,7 @@ function fn_cate(type) {
                         todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                         todoHTML +=         '</div>';
                         todoHTML +=         '<div class="todo-item-btns">';
+                        todoHTML +=             '<button class="btn-incomplete" onclick="fn_incomplete(' + item.index + ');"><i class="fas fa-undo-alt"></i></button>';
                         todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');"><i class="fas fa-trash-alt"></i></button>';
                         todoHTML +=         '</div>';
                         todoHTML +=     '</div>';
@@ -260,11 +296,12 @@ function fn_cate(type) {
                 }
             } else {
                 todoHTML += '<div class="todo-item-blank">';
-                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할일을 생성해보세요.';
+                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할 일을 생성해보세요.';
                 todoHTML += '</div>';
             }
             break;
         case '할 일' : 
+            state.currentCate = type;
             let IncompleteList = state.todo_list.filter((item) => {
                 if(!item.isComplete) return item;
             });
@@ -292,11 +329,12 @@ function fn_cate(type) {
                 }
             } else {
                 todoHTML += '<div class="todo-item-blank">';
-                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할일을 생성해보세요.';
+                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할 일이 존재하지 않네요.<br/>할 일을 추가해 보세요.';
                 todoHTML += '</div>';
             }
             break;
         case '완료된 일' : 
+            state.currentCate = type;
             let completeList = state.todo_list.filter((item) => {
                 if(item.isComplete) return item;
             });
@@ -315,6 +353,7 @@ function fn_cate(type) {
                     todoHTML +=             item.todo.replaceAll(/\n/g, '<br/>');
                     todoHTML +=         '</div>';
                     todoHTML +=         '<div class="todo-item-btns">';
+                    todoHTML +=             '<button class="btn-incomplete" onclick="fn_incomplete(' + item.index + ');"><i class="fas fa-undo-alt"></i></button>';
                     todoHTML +=             '<button class="btn-remove" onclick="fn_remove(' + item.index + ');"><i class="fas fa-trash-alt"></i></button>';
                     todoHTML +=         '</div>';
                     todoHTML +=     '</div>';
@@ -322,7 +361,7 @@ function fn_cate(type) {
                 }
             } else {
                 todoHTML += '<div class="todo-item-blank">';
-                todoHTML +=     '<i class="fas fa-ghost"></i><br/>할일 목록이 없습니다.<br/>"할일 추가하기" 버튼을 눌러 할일을 생성해보세요.';
+                todoHTML +=     '<i class="fas fa-ghost"></i><br/>완료된 일이 없습니다.';
                 todoHTML += '</div>';
             }
             break;
@@ -340,6 +379,35 @@ function fn_cate(type) {
 window.onload = () => {
     //Initialize
     refreshTodo();
+
+    /**
+     * 닉네임 INPUT
+     */
+    if(state.isInitial) {
+        document.querySelector('#nickname').addEventListener('keyup', function(e) {
+            let nickname = e.target.value;
+            state.nickname = nickname;
+            if(nickname.length > 1) {
+                document.querySelector('#input-status').innerText = 'OK!';
+                if(e.keyCode == 13) {
+                    const whiteBlur = document.querySelector('#whiteBlur');
+                    const intro = document.querySelector('#initial');
+    
+                    whiteBlur.style.width = 0;
+                    intro.style.display = 'none';
+    
+                    const nickEL = document.querySelector('#user-nickname');
+                    nickEL.innerText = state.nickname;
+                    localStorage.setItem('todo_list', encodeURI(JSON.stringify([])));
+                    localStorage.setItem('nickname', encodeURI(nickname));
+                    state.isInitial = !state.isInitial;
+                }
+            } else {
+                document.querySelector('#input-status').innerText = '두 글자 이상이어야 합니다.';
+            }
+        });
+    }
+    
 
     /**
      * 모드체크
@@ -442,8 +510,6 @@ window.onload = () => {
 
     addBtn.addEventListener('click', () => {
         addTodoPopup(true);
-        console.log(">> Add ToDo Popup");
-        console.log(state.isWriting);
     });
 
     backBlur.addEventListener('click', () => {
@@ -491,12 +557,18 @@ window.onload = () => {
             isComplete: false,
         };
         
-        console.log(state.todo_list);
         state.todo_list.push(todo);
         localStorage.setItem('todo_list', encodeURI(JSON.stringify(state.todo_list)));
 
         addTodoPopup(false);
         fn_notice('성공적으로 할 일을 추가했습니다.');
+        todoFrm.reset();
         refreshTodo();
     });
 };
+
+function fn_reset() {
+    localStorage.removeItem('todo_list');
+    localStorage.removeItem('nickname');
+    refreshTodo();
+}

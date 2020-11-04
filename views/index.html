@@ -8,11 +8,20 @@
     <!-- Add Fontawesome -->
     <link href="/css/fontawesome/fontawesome.css" rel="stylesheet">
     <link href="/css/fontawesome/all.css" rel="stylesheet">
-    <script defer src="/css/fontawesome/js/all.js"></script>
 </head>
 <body>
     <div id="AppContainer" class="AppContainer">
         <div id="backBlur"></div>
+        <div id="whiteBlur"></div>
+
+        <div id="initial">
+            <div id="intro-section">
+                <div class='intro-text'>환영합니다.</div>
+                <div class='intro-text'>처음 오셨네요.<br/>
+                    닉네임을 입력하시면 바로 ToDo Application을 이용하실 수 있어요.</div>
+                <div class='intro-text'><input type="type" autoFocus id="nickname" autocomplete="off" placeholder="닉네임을 입력해주세요..."/><div id="input-status"></div></div>
+            </div>
+        </div>
 
         <div id="style-mode-toggle">
             <div class="mode-select">Light</div>
@@ -21,7 +30,10 @@
         
         <div id="app-component" class="app-component">
             <div class="app-top">
-                <div class="app-top-left"><i class="far fa-sticky-note"></i> To-Do</div>
+                <div class="app-top-left">
+                    <i class="far fa-sticky-note"></i>
+                    <div id="user-nickname"></div> To-Do List
+                </div>
                 <div class="app-top-right">
                     <div id="addTodo"><i class="fas fa-pencil-alt"></i>  할일 추가하기</div>
                 </div>
@@ -35,7 +47,7 @@
 
             </div>
             <div class="app-bottom">
-                Developer Park Sung Hwa (sihus@naver.com)
+                Front-end Engineer, Park Sung Hwa (sihus@naver.com)
             </div>
         </div>
 
@@ -47,10 +59,9 @@
                 <input type="date" name="date" id="form-date"/>
                 <input type="time" name="time" id="form-time"/>
                 <textarea name="todo" id="form-todo" placeholder="할일을 입력해주세요"/></textarea>
-                <button type="button" id="submitBtn">Add Todo</button>
+                <button type="button" id="submitBtn">할일 추가하기</button>
             </form>
         </div>
-
     </div>
 
     <script src="/js/Todo.js"></script>

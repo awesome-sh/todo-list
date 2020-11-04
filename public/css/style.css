@@ -18,13 +18,7 @@ html, body {
     box-sizing: border-box;
 }
 
-b {
-    padding-left: 5px;
-    padding-right: 5px;
-    color: #fff;
-    border: 1px solid rgb(128, 50, 230);
-    background-color: rgb(154, 78, 253);
-}
+
 
 button {
     cursor: pointer;
@@ -38,7 +32,7 @@ button {
 
 ::selection {
     color: #fff !important;
-    background-color: rgb(154, 78, 253) !important;
+    background-color: #7166fb !important;
 }
 
 /**
@@ -73,7 +67,7 @@ button {
 
 .mode-select {
     color: #fff !important;
-    background-color: rgb(154, 78, 253) !important;
+    background-color: #7166fb!important;
 }
 
 
@@ -82,18 +76,18 @@ button {
 */
 .AppContainer {
     position: fixed;
-    background-color: #f0eef5;
+    background: rgb(236,239,247);
+    background: linear-gradient(180deg, rgba(236,239,247,1) 0%, rgba(221,226,236,1) 100%);
     width: 100%;
     height: 100%;
-    
 }
 
 .AppContainer-dark-mode {
     position: fixed;
-    background-color: #2c3041;
+    background: rgb(56,63,92);
+    background: radial-gradient(circle, rgba(56,63,92,1) 0%, rgba(44,48,65,1) 100%);
     width: 100%;
     height: 100%;
-    
 }
 
 
@@ -154,15 +148,26 @@ button {
 }
 
 .app-top .app-top-left {
+    display: flex;
+    align-items: center;
     padding-left: 30px;
     width: 80%;
     line-height: 80px;
-    color: #9a4efd;
+    color: #7166fb;
     font-size: 25px;
     font-weight: 500;
     text-align: left;
     
 }
+
+.app-top .app-top-left i {
+    margin-right: 15px;
+}
+
+#user-nickname {
+    margin-right: 10px;
+}
+
 
 .app-top .app-top-right {
     width: 20%;
@@ -179,18 +184,21 @@ button {
     font-weight: 500;
     text-align: center;
     color: #fff;
-    background-color: #9a4efd;
-    border: 1px solid #8940e9;
+    background-color: #7166fb;
     transition: all 0.5s ease-out;
     -webkit-transition: all 0.5s ease-out;
     -moz-transition: all 0.5s ease-out;
     -ms-transition: all 0.5s ease-out;
     -o-transition: all 0.5s ease-out;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
 }
 
 .app-top .app-top-right > div:hover {
-    background-color: #7a31da;
-    border: 1px solid #6120b4;
+    background-color: #554aec;
 }
 
 .app-cate {
@@ -201,7 +209,7 @@ button {
 
 .selected {
     color: #fff;
-    background-color: #8a47e0;
+    background-color: #7166fb;
 }
 
 .app-cate > div {
@@ -275,7 +283,7 @@ button {
     margin-right: 10px;
     border-radius: 5px;
     color: #333;
-    background-color: #d5bff1;
+    background-color: #e6e5ff;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -287,7 +295,7 @@ button {
     margin-right: 10px;
     border-radius: 5px;
     color: #333;
-    background-color: #f7f1ff;
+    background-color: #e6e5ff;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -320,11 +328,11 @@ button {
 .todo-item-btns {
     width: 20%;
     vertical-align: middle;
-    text-align: right;
+    text-align: center;
 }
 
 .todo-item-btns button {
-    width: 50px;
+    width: 30px;
     height: 30px;
     font-size: 12px;
     outline: none;
@@ -339,12 +347,31 @@ button {
 
 .todo-item-btns button.btn-complete {
     color: #eee;
-    background-color: #7a31da;
+    background-color: #7166fb;
+}
+
+.todo-item-btns button.btn-complete:hover {
+    background-color: #3c31d3;
+}
+
+.todo-item-btns button.btn-incomplete {
+    color: #7166fb;
+    background-color: #fff;
+    border: 1px solid #7166fb;
+}
+
+.todo-item-btns button.btn-incomplete:hover {
+    color: #fff;
+    background-color: #7166fb;
 }
 
 .todo-item-btns button.btn-remove {
     color: #eee;
-    background-color: #da3131;
+    background-color: #ee4f4f;
+}
+
+.todo-item-btns button.btn-remove:hover {
+    background-color: #ce3030;
 }
 
 .complete-todo-line {
@@ -381,6 +408,90 @@ button {
     -o-transition: all 0.5s ease-out;
 }
 
+#whiteBlur {
+    position: absolute;
+    z-index: 100;
+    width: 0;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.842);
+    transition: all 1s ease-out;
+    -webkit-transition: all 1s ease-out;
+    -moz-transition: all 1s ease-out;
+    -ms-transition: all 1s ease-out;
+    -o-transition: all 1s ease-out;
+}
+
+#initial {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 200;
+    opacity: 0;
+    width: 700px;
+    height: 300px;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transition: all 0.5s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+}
+
+.intro-section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.intro-text {
+    display: flex;
+    position: absolute;
+    z-index: 500;
+    opacity: 0;
+    height: 40px;
+    line-height: 40px;
+    left: -40px;
+    font-size: 21px;
+    font-weight: 300;
+    transition: all 0.8s ease-out;
+    -webkit-transition: all 0.8s ease-out;
+    -moz-transition: all 0.8s ease-out;
+    -ms-transition: all 0.8s ease-out;
+    -o-transition: all 0.8s ease-out;
+}
+
+.intro-text input {
+    margin-top: 55px;
+    width: 500px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 15px;
+    border: none;
+    border-bottom: 1px solid #7166fb;
+    outline: none;
+    transition: all 0.5s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+}
+
+.intro-text input:focus {
+    border-bottom: 1px solid #392ecf;
+}
+
+#input-status {
+    margin-top: 55px;
+    font-size: 14px;
+    font-weight: 500;
+    color:#7166fb;
+}
+
 #add-todo-component {
     position: absolute;
     top: 50%;
@@ -414,7 +525,7 @@ button {
     padding-top: 15px;
     font-size: 24px;
     font-weight: 100;
-    color: #7a31da;
+    color: #7166fb;
 }
 
 #addTodoFrm {
@@ -440,7 +551,7 @@ button {
 }
 
 #addTodoFrm > *:focus {
-    border: 1px solid #7a31da;
+    border: 1px solid #7166fb;
 }
 
 #addTodoFrm input {
@@ -460,11 +571,11 @@ button {
     height: 45px;
     padding-left: none;
     color: #fff;
-    background-color: #7a31da;
+    background-color: #7166fb;
 }
 
 #addTodoFrm button:hover {
-    background-color: #6822c4;
+    background-color: #594ee9;
 }
 
 /**
@@ -477,7 +588,7 @@ button {
     height: 60px;
     bottom: 0;
     color: #fff;
-    background-color: rgba(126, 43, 235, 0.933);
+    background-color: #7166fb;
     transition: all 0.7s ease-out;
     -webkit-transition: all 0.7s ease-out;
     -moz-transition: all 0.7s ease-out;
@@ -495,7 +606,7 @@ button {
     color: #fff;
     font-size: 15px;
     text-align: center;
-    background-color:  rgba(126, 43, 235, 0.849);
+    background-color: #7166fb;
     transition: all 0.7s ease-out;
     -webkit-transition: all 0.7s ease-out;
     -moz-transition: all 0.7s ease-out;
@@ -535,7 +646,7 @@ button {
 
 .confirm i {
     font-size: 48px;
-    color: rgba(126, 43, 235, 0.849);
+    color: #7166fb;
     margin-bottom: 15px;
 }
 
@@ -548,14 +659,14 @@ button {
 
 .confirm button#confirm-delete {
     color: #fff;
-    background-color: #7a31da;
+    background-color: #7166fb;
 }
 
 .confirm button#confirm-delete:hover {
     color: #fff;
-    background-color: #5700c9;
+    background-color: #584ee4;
 }
 .confirm button:hover {
     color: #fff;
-    background-color: #bd2222;
+    background-color: #ec4f4f;
 }

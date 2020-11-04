@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/views/index.html'));
 });
 
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 // To-Do Application Server Start
 app.listen(3000, function() {
     console.log('>> To-Do Application Server Started, Port : 3000');
