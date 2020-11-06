@@ -7,8 +7,8 @@
 To-Do Application Based On Vanila JS, [**Todo Application View Demo**](https://awesome-sh.github.io/todo-list/)
 
 ## :speech_balloon: Update Note
-  - Style Mode Change (20.11.03)
-    : Light & Dark Mode 추가
+  - Style Mode Change 
+    : Light & Dark Mode 추가 (20.11.03)
     
   - Data storage using Localstorage (20.11.04)
   - Github Pages를 이용해 Demo Deploy (20.11.05)
