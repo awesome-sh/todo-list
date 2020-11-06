@@ -485,6 +485,19 @@ button {
     border-bottom: 1px solid #392ecf;
 }
 
+.intro-btn {
+    margin-left: 15px;
+    width: 100px;
+    height: 35px;
+    border: none;
+    color: #eee;
+    background-color: #7166fb;
+}
+
+.intro-btn:hover {
+    background-color: #392ecf;
+}
+
 #input-status {
     margin-top: 55px;
     font-size: 14px;

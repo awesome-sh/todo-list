@@ -372,6 +372,22 @@ function fn_cate(type) {
 }
 
 
+/**
+ * Intro Btn
+ */
+function fn_introBtn() {
+    const whiteBlur = document.querySelector('#whiteBlur');
+    const intro = document.querySelector('#initial');
+
+    whiteBlur.style.width = 0;
+    intro.style.display = 'none';
+
+    const nickEL = document.querySelector('#user-nickname');
+    nickEL.innerText = state.nickname;
+    localStorage.setItem('todo_list', encodeURI(JSON.stringify([])));
+    localStorage.setItem('nickname', encodeURI(nickname));
+    state.isInitial = !state.isInitial;
+}
 
 /**
  * DOM Load End
@@ -388,7 +404,7 @@ window.onload = () => {
             let nickname = e.target.value;
             state.nickname = nickname;
             if(nickname.length > 1) {
-                document.querySelector('#input-status').innerText = 'OK!';
+                document.querySelector('#input-status').innerHTML = 'OK! <button class="intro-btn" type="button" onclick="fn_introBtn();">시작하기</button>';
                 if(e.keyCode == 13) {
                     const whiteBlur = document.querySelector('#whiteBlur');
                     const intro = document.querySelector('#initial');
