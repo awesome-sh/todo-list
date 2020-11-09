@@ -13,6 +13,7 @@ To-Do Application Based On Vanila JS, [**Todo Application View Demo**](https://a
   - Data storage using Localstorage (20.11.04)
   - Github Pages를 이용해 Demo Deploy (20.11.05)
   - Intro Page, Start Button 추가 (20.11.06)
+  - Setting Nickname Bug Fixed (20.11.09)
   
 ## :desktop_computer: Preview
 ![Screen Shot](https://github.com/awesome-sh/todo-list/blob/main/screenshot/1.png)
