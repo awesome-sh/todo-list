@@ -21,7 +21,7 @@ function refreshTodo() {
 
     if(localStorage.getItem('todo_list')) {
         state.todo_list = JSON.parse(decodeURI(localStorage.getItem('todo_list')));
-        state.nickname = JSON.parse(decodeURI(localStorage.getItem('nickname')));
+        state.nickname = String(decodeURI(localStorage.getItem('nickname')));
 
         document.querySelector('#user-nickname').innerText = state.nickname;
 
