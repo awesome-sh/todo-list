@@ -3,7 +3,7 @@
  */
 const state = {
     nickname: null,
-    isInitial: false,
+    isInitial: true,
     styleMode: 'light',
     currentCate: '모아보기',
     isWriting: false,
@@ -21,7 +21,7 @@ function refreshTodo() {
 
     if(localStorage.getItem('todo_list')) {
         state.todo_list = JSON.parse(decodeURI(localStorage.getItem('todo_list')));
-        state.nickname = decodeURI(localStorage.getItem('nickname'));
+        state.nickname = JSON.parse(decodeURI(localStorage.getItem('nickname')));
 
         document.querySelector('#user-nickname').innerText = state.nickname;
 
@@ -384,9 +384,12 @@ function fn_introBtn() {
 
     const nickEL = document.querySelector('#user-nickname');
     nickEL.innerText = state.nickname;
+
     localStorage.setItem('todo_list', encodeURI(JSON.stringify([])));
-    localStorage.setItem('nickname', encodeURI(nickname));
+    localStorage.setItem('nickname', encodeURI(JSON.stringify(state.nickname)));
     state.isInitial = !state.isInitial;
+
+    refreshTodo();
 }
 
 /**
@@ -414,9 +417,11 @@ window.onload = () => {
     
                     const nickEL = document.querySelector('#user-nickname');
                     nickEL.innerText = state.nickname;
+
                     localStorage.setItem('todo_list', encodeURI(JSON.stringify([])));
-                    localStorage.setItem('nickname', encodeURI(nickname));
+                    localStorage.setItem('nickname', encodeURI(JSON.stringify(state.nickname)));
                     state.isInitial = !state.isInitial;
+                    refreshTodo();
                 }
             } else {
                 document.querySelector('#input-status').innerText = '두 글자 이상이어야 합니다.';
