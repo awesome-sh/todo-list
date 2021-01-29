@@ -1,5 +1,3 @@
-<img src="https://devicons.github.io/devicon/devicon.git/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/>   <img src="https://devicons.github.io/devicon/devicon.git/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/>
-
 # :notebook: Todo List
 To-Do Application Based On Vanila JS, [**Todo Application View Demo**](https://awesome-sh.github.io/todo-list/)
 
